@@ -1,0 +1,16 @@
+diff --git a/lib/sparseconvnet/utils.py b/lib/sparseconvnet/utils.py
+index b7c025a..68e6345 100644
+--- a/lib/sparseconvnet/utils.py
++++ b/lib/sparseconvnet/utils.py
+@@ -142,7 +142,10 @@ def checkpoint_restore(model, exp_name, use_cuda=True):
+     if len(f) > 0:
+         checpoint=f[-1]
+         print('Restore from ' + checpoint)
+-        model.load_state_dict(torch.load(checpoint))
++        if use_cuda:
++            model.load_state_dict(torch.load(checpoint))
++        else:
++            model.load_state_dict(torch.load(checpoint, map_location=torch.device('cpu')))
+         epoch = int(checpoint[checpoint.find('epoch')+5: checpoint.find('.pth')])
+     else:
+         print('No existing model, starting training from scratch...')

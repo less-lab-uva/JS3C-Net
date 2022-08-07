@@ -37,7 +37,10 @@ class Unet(nn.Module):
 
 
     def forward(self, x):
-        batch_x = [x['seg_coords'], x['seg_features'].cuda()]
+        if torch.cuda.is_available():
+            batch_x = [x['seg_coords'], x['seg_features'].cuda()]
+        else:
+            batch_x = [x['seg_coords'], x['seg_features']]
         x = self.sparseModel(batch_x)
         if self.config['Completion']['interaction']:
             feat = self.shape_embedding(x.unsqueeze(0).permute(0,2,1))

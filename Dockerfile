@@ -62,6 +62,9 @@ WORKDIR /JS3C-Net/lib/nearest_neighbors
 RUN python3 setup.py install
 WORKDIR /JS3C-Net/lib/pointgroup_ops
 RUN python3 setup.py develop
+WORKDIR /JS3C-Net/
+COPY sparseconvnet.patch sparseconvnet.patch
+RUN git apply sparseconvnet.patch
 WORKDIR /
 
 
