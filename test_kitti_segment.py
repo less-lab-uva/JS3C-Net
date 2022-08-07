@@ -32,21 +32,20 @@ def parse_args():
     parser.add_argument('--log_dir', type=str, default='JS3C-Net-kitti', help='Experiment root')
     parser.add_argument('--num_votes', type=int, default=10, help='Aggregate segmentation scores with voting [default: 10]')
     parser.add_argument('--dataset', type=str, default='val', help='[val/test]')
+    parser.add_argument('--labels', type=str, default='/dataset/semantic_kitti/dataset/', help='')
     return parser.parse_args()
 
 args = parse_args()
 
 print('Load Model...')
 os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
-model_path = 'log/'+args.log_dir
+model_path = 'log/JS3C-Net-kitti'
 val_reps = args.num_votes
 
-output_dir = model_path + '/dump/'
-if not os.path.exists(output_dir): os.mkdir(output_dir)
-output_dir = output_dir + 'segmentation'
-if not os.path.exists(output_dir): os.mkdir(output_dir)
-submit_dir = output_dir + '/submit_' + args.dataset + datetime.now().strftime('%Y_%m_%d')
-if not os.path.exists(submit_dir): os.mkdir(submit_dir)
+output_dir = args.log_dir
+if not os.path.exists(output_dir):
+    os.mkdir(output_dir)
+submit_dir = args.log_dir
 
 use_cuda = torch.cuda.is_available()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -55,6 +54,7 @@ sys.path.append(model_path)
 with open(model_path+'/args.txt', 'r') as f:
     config = json.load(f)
 print(config)
+config['GENERAL']['dataset_dir'] = args.labels
 
 seg_head = importlib.import_module('models.' + config['Segmentation']['model_name'])
 seg_model = seg_head.get_model

@@ -55,7 +55,7 @@ RUN python3 -c "import torch;print(torch.cuda.is_available())" | grep 'True'
 RUN apt-get install -y libsparsehash-dev
 
 RUN ls
-RUN git clone https://github.com/GarrettChristian/JS3C-Net.git
+RUN git clone https://github.com/less-lab-uva/JS3C-Net.git
 WORKDIR /JS3C-Net/lib/
 RUN python3 setup.py develop
 WORKDIR /JS3C-Net/lib/nearest_neighbors
