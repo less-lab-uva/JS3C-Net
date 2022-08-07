@@ -1,3 +1,33 @@
+# Dockerization
+This is a dockerization of JS3C-Net. As detailed below, the project depends on Ubuntu 16.04, Pytorch 1.3.1, and several third party libraries.
+The `Dockerfile` will install all of the dependencies, including a few hot-fixes. However, there is an incompatibility between the requirements and `spconvv1.0`.
+As installed, the tests bundled in the docker image at `/spconv/tests/test_conv.py` will not all pass on the GPU, but will pass on the CPU.
+It is unclear if this affects the results of JS3C-Net when run on the GPU. However, to disable the GPU, pass `--gpus -1` when running the test scripts.
+
+## Building the Docker image
+1. Because the image needs access to CUDA while building, first apply the fix described in [this issue comment](https://github.com/NVIDIA/nvidia-docker/issues/595#issuecomment-519714769). 
+* Edit/create `/etc/docker/daemon.json` and set the following contents
+```json
+{
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    },
+    "default-runtime": "nvidia"
+}
+```
+* Install `nvidia-container-runtime`
+```
+sudo apt-get install nvidia-container-runtime
+```
+* `sudo systemctl restart docker.service`
+2. In some instances, it appears that the install process cannot determine the GPU architecture. This can be resolved by uncommenting [line 51 of the Dockerfile](Dockerfile) and setting the arch to the appropriate value for your GPU which you can lookup [here](https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/). For example, 6.1 is the arch for the GTX 10X0 line of GPUs.  
+```dockerfile
+RUN TORCH_CUDA_ARCH_LIST="6.1"
+```
+
 # JS3C-Net
 ### Sparse Single Sweep LiDAR Point Cloud Segmentation via Learning Contextual Shape Priors from Scene Completion (AAAI2021)
  

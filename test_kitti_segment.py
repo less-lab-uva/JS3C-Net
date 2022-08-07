@@ -28,7 +28,7 @@ from utils.np_ioueval import iouEval
 def parse_args():
     '''PARAMETERS'''
     parser = argparse.ArgumentParser('Model')
-    parser.add_argument('--gpu', type=str, default='0', help='specify gpu device')
+    parser.add_argument('--gpu', type=str, default='0', help='specify gpu device, use -1 to disable GPU')
     parser.add_argument('--log_dir', type=str, default='JS3C-Net-kitti', help='Experiment root')
     parser.add_argument('--num_votes', type=int, default=10, help='Aggregate segmentation scores with voting [default: 10]')
     parser.add_argument('--dataset', type=str, default='val', help='[val/test]')
