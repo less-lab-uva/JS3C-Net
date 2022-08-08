@@ -181,7 +181,7 @@ with torch.no_grad():
         sequence = components[-3]
         points_name = components[-1]
         label_name = points_name.replace('bin', 'label')
-        full_save_dir = os.path.join(submit_dir, 'sequences', sequence, 'predictions')
+        full_save_dir = submit_dir
         os.makedirs(full_save_dir, exist_ok=True)
         full_label_name = os.path.join(full_save_dir, label_name)
         if os.path.exists(full_label_name) and args.dataset == 'test':
