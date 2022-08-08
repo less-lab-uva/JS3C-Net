@@ -32,6 +32,7 @@ def parse_args():
     parser.add_argument('--log_dir', type=str, default='JS3C-Net-kitti', help='Experiment root')
     parser.add_argument('--num_votes', type=int, default=10, help='Aggregate segmentation scores with voting [default: 10]')
     parser.add_argument('--dataset', type=str, default='val', help='[val/test]')
+    parser.add_argument('--output_dir', type=str, help='location to save predictions')
     parser.add_argument('--labels', type=str, default='/dataset/semantic_kitti/dataset/', help='')
     return parser.parse_args()
 
@@ -42,10 +43,10 @@ os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 model_path = 'log/JS3C-Net-kitti'
 val_reps = args.num_votes
 
-output_dir = args.log_dir
+output_dir = args.output_dir
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
-submit_dir = args.log_dir
+submit_dir = args.output_dir
 
 use_cuda = torch.cuda.is_available()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
